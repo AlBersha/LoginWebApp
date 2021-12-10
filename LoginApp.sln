@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginApp", "LoginApp\LoginApp.csproj", "{116232A2-F9A2-48BB-845D-B14C85A292CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{C816723A-70D5-455B-84F1-61101FF6ED6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{E87A99D1-C9C6-4FCC-AECD-D14F94DE5F66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{116232A2-F9A2-48BB-845D-B14C85A292CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{116232A2-F9A2-48BB-845D-B14C85A292CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{116232A2-F9A2-48BB-845D-B14C85A292CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C816723A-70D5-455B-84F1-61101FF6ED6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C816723A-70D5-455B-84F1-61101FF6ED6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C816723A-70D5-455B-84F1-61101FF6ED6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C816723A-70D5-455B-84F1-61101FF6ED6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E87A99D1-C9C6-4FCC-AECD-D14F94DE5F66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E87A99D1-C9C6-4FCC-AECD-D14F94DE5F66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E87A99D1-C9C6-4FCC-AECD-D14F94DE5F66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E87A99D1-C9C6-4FCC-AECD-D14F94DE5F66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

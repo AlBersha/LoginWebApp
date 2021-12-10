@@ -1,6 +1,4 @@
-using System;
-
-namespace LoginApp.Models
+namespace Domain.Models.ViewModels
 {
     public class ErrorViewModel
     {

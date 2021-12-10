@@ -1,11 +1,17 @@
-﻿using LoginApp.Models;
-using LoginApp.Models.Services;
+﻿using Domain.Interfaces;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoginApp.Controllers
 {
     public class LoginController : Controller
     {
+        private IUserDomainService _domainService { get; set; }
+
+        public LoginController(IUserDomainService domainService)
+        {
+            _domainService = domainService;
+        }
         // GET
         public IActionResult Index()
         {
@@ -14,19 +20,12 @@ namespace LoginApp.Controllers
 
         public IActionResult LoginProcessing(UserModel model)
         {
-            var securityService = new SecurityService();
-
-            if (securityService.IsValid(model))
-            {
-                return View("LoginSuccessfully", model);
-            }
-
-            return View("LoginPage", model);
+            return _domainService.LoginUser(model) ? View("LoginSuccessfully") : View("LoginPage", model);
         }
 
-        // public IActionResult ToRegister()
-        // {
-        //     return View("Registration");
-        // }
+        public IActionResult Register()
+        {
+            return View("~/Views/Register/Registration.cshtml");
+        }
     }
 }

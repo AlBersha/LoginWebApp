@@ -1,4 +1,4 @@
-﻿@model LoginApp.Models.UserModel
+﻿@model LoginApp.Models.RegisterViewModel
 
 <h4>UserModel</h4>
 <hr />
@@ -18,7 +18,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+                <input asp-for="Password" class="form-control" type="password"/>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -33,9 +33,10 @@
     </div>
 </div>
 
-@*<div>
-    <a asp-action="Index">Back to List</a>
-</div>*@
+<div>
+    already have account?
+    <a asp-action="Login">Login</a>
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -1,4 +1,4 @@
-﻿@model LoginApp.Models.UserModel
+﻿@model Domain.Models.UserModel
 
 <div class="row">
     <div class="col-md-4">
@@ -26,9 +26,9 @@
     </div>
 </div>
 
-@*<div>
-    or <a asp-action="Register"> sign up</a>
-</div>*@
+<div>
+     or <a asp-action="Register"> sign up</a>
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

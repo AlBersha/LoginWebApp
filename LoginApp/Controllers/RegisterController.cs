@@ -1,18 +1,35 @@
-﻿using LoginApp.Models;
+﻿using Domain.Interfaces;
+using Domain.Models;
+using LoginApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoginApp.Controllers
 {
     public class RegisterController : Controller
     {
+        private IUserDomainService _domainService { get; set; }
+
+        public RegisterController(IUserDomainService domainService)
+        {
+            _domainService = domainService;
+        }
+        
         public IActionResult Index()
         {
             return View("Registration");
         }
 
-        public IActionResult RegisterUser(UserModel model)
+        public IActionResult RegisterUser(RegisterViewModel model)
         {
-            return View("LoginSuccessfully");
+            var user = new UserModel(model);
+            _domainService.CreateUser(user);
+            return View("~/Views/Login/LoginSuccessfully.cshtml", user);
+            
+        }
+
+        public IActionResult Login()
+        {
+            return View("~/Views/Login/LoginPage.cshtml");
         }
     }
 }

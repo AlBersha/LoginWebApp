@@ -27,7 +27,7 @@ namespace Domain
 
         public UserModel CreateUser(UserModel user)
         {
-            (user.Salt, user.Password) = _cryptoService.HashPassword(user.Password);
+            user.Password = _cryptoService.GetHashString(_cryptoService.HashPassword(user.Password, _cryptoService.GetSalt()));
             return _userRepository.CreateUser(user);
         }
 

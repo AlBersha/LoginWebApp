@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,32 +15,34 @@ namespace Domain.Interfaces
             return shaHash.ComputeHash(Encoding.UTF8.GetBytes(password));
         } 
         
-        private byte[] GetSalt()
+        public byte[] GetSalt()
         {
-            var buffer = new byte[32];
+            var buffer = new byte[16];
             var rng = new RNGCryptoServiceProvider();
             rng.GetBytes(buffer);
             return buffer;
         }
             
-        public (string, string) HashPassword(string password)
+        public byte[] HashPassword(string password, byte[] salt)
         {
             var argon = new Argon2i(GetSHA(password));
-            argon.DegreeOfParallelism = 16;
-            argon.MemorySize = 8192;
-            argon.Iterations = 40;
-            argon.Salt = GetSalt();
-            // argon2.AssociatedData = userUuidBytes;
+            argon.DegreeOfParallelism = 8;
+            argon.MemorySize = 1024*1024;
+            argon.Iterations = 4;
+            argon.Salt = salt;
 
-            var hashout = Regex.Replace(BitConverter.ToString(argon.GetBytes(512)).ToLower(), "-", "");
-            var saltout = Regex.Replace(BitConverter.ToString(argon.Salt).ToLower(), "-", "");
-
-            return (saltout, hashout);
+            return argon.GetBytes(64);
         }
 
-        // public bool IsRightPassword(string password, string hash)
-        // {
-        //     return hash == HashPassword(password);
-        // }
+        public string GetHashString(byte[] hash)
+        {
+            return Regex.Replace(BitConverter.ToString(hash).ToLower(), "-", "");
+        }
+        
+        private bool IsRightPassword(string password, byte[] salt, byte[] hash)
+        {
+            var newHash = HashPassword(password, salt);
+            return hash.SequenceEqual(newHash);
+        }
     }
 }

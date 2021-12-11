@@ -1,6 +1,6 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
-using LoginApp.Models;
+using Domain.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoginApp.Controllers

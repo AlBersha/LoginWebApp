@@ -12,7 +12,7 @@ namespace Domain.Interfaces
         private byte[] GetSHA(string password)
         {
             using var shaHash = SHA256.Create();
-            return shaHash.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return shaHash.ComputeHash(Encoding.Default.GetBytes(password));
         } 
         
         public byte[] GetSalt()
@@ -39,10 +39,10 @@ namespace Domain.Interfaces
             return Regex.Replace(BitConverter.ToString(hash).ToLower(), "-", "");
         }
         
-        private bool IsRightPassword(string password, byte[] salt, byte[] hash)
+        private bool IsRightPassword(string password, string salt, string hash)
         {
-            var newHash = HashPassword(password, salt);
-            return hash.SequenceEqual(newHash);
+            var newHash = HashPassword(password, Encoding.Unicode.GetBytes(salt));
+            return Encoding.Unicode.GetBytes(hash).SequenceEqual(newHash);
         }
     }
 }

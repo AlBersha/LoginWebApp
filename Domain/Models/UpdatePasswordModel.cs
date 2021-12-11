@@ -1,5 +1,4 @@
 ﻿using System;
-using LoginApp.Models;
 
 namespace Domain.Models
 {

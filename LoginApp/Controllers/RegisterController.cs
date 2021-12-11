@@ -1,6 +1,6 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
-using LoginApp.Models;
+using Domain.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoginApp.Controllers
@@ -23,8 +23,7 @@ namespace LoginApp.Controllers
         {
             var user = new UserModel(model);
             _domainService.CreateUser(user);
-            return View("~/Views/Login/LoginSuccessfully.cshtml", user);
-            
+            return View("~/Views/Login/LoginSuccessfully.cshtml", new LoginViewModel(user));            
         }
 
         public IActionResult Login()

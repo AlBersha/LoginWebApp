@@ -1,5 +1,6 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
+using Domain.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoginApp.Controllers
@@ -18,9 +19,9 @@ namespace LoginApp.Controllers
             return View("LoginPage");
         }
 
-        public IActionResult LoginProcessing(UserModel model)
+        public IActionResult LoginProcessing(LoginViewModel model)
         {
-            return _domainService.LoginUser(model) ? View("LoginSuccessfully") : View("LoginPage", model);
+            return _domainService.LoginUser(new UserModel(model)) ? View("LoginSuccessfully", model) : View("LoginPage");
         }
 
         public IActionResult Register()

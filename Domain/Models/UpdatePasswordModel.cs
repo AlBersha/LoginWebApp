@@ -1,7 +1,4 @@
-﻿using System;
-using LoginApp.Models;
-
-namespace Domain.Models
+﻿namespace Domain.Models
 {
     public class UpdatePasswordModel
     {

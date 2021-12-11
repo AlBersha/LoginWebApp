@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 using Domain.Interfaces;
 using Domain.Models;
@@ -36,8 +37,8 @@ namespace Domain
 
         public bool LoginUser(UserModel user)
         {
-            // return _cryptoService.IsRightPassword(user.Password, _userRepository.GetUserById(user.UserName).Password);
-            return true;
+            var potentialUser = _userRepository.GetUserById(user.UserName);
+            return _cryptoService.IsRightPassword(user.Password, potentialUser.Salt, potentialUser.Password);
         }
 
         public UserModel UpdateUserPassword(UpdatePasswordModel user)

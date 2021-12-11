@@ -2,10 +2,16 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>LoginApp</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\style" />
+      <ProjectReference Include="..\Domain\Domain.csproj" />
+      <ProjectReference Include="..\Persistence\Persistence.csproj" />
     </ItemGroup>
+    
+    <PropertyGroup>
+        <StartupObject>LoginApp.Program</StartupObject>
+    </PropertyGroup>
 
 </Project>

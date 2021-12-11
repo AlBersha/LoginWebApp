@@ -17,5 +17,11 @@ namespace Domain.Models.ViewModels
             Email = string.Empty;
             Password = string.Empty;
         }
+        
+        public LoginViewModel(UserModel user)
+        {
+            UserName = user.UserName;
+            Email = user.Email;
+        }
     }
 }

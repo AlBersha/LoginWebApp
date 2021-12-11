@@ -23,7 +23,7 @@ namespace LoginApp.Controllers
         {
             var user = new UserModel(model);
             _domainService.CreateUser(user);
-            return View("~/Views/Login/LoginSuccessfully.cshtml", user);
+            return View("~/Views/Login/LoginSuccessfully.cshtml", new LoginViewModel(user));
             
         }
 

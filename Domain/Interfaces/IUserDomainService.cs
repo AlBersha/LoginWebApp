@@ -12,6 +12,6 @@ namespace Domain.Interfaces
         public bool LoginUser(UserModel user);
         public UserModel UpdateUserData (UserModel user);
         public UserModel UpdateUserPassword(UpdatePasswordModel user);
-        public UserModel DeleteUser (Guid userId);
+        public UserModel DeleteUser (string username);
     }
 }

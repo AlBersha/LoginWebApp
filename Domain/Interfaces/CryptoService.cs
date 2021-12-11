@@ -33,13 +33,7 @@ namespace Domain.Interfaces
 
             return argon.GetBytes(64);
         }
-
-        public string GetHashString(byte[] hash)
-        {
-            return Regex.Replace(BitConverter.ToString(hash).ToLower(), "-", "");
-        }
-        
-        private bool IsRightPassword(string password, string salt, string hash)
+        private bool IsRightPassword(string password, byte[] salt, byte[] hash)
         {
             var newHash = HashPassword(password, Encoding.Unicode.GetBytes(salt));
             return Encoding.Unicode.GetBytes(hash).SequenceEqual(newHash);

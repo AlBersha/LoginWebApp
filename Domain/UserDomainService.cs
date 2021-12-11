@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Domain.Interfaces;
 using Domain.Models;
 
@@ -27,7 +28,9 @@ namespace Domain
 
         public UserModel CreateUser(UserModel user)
         {
-            user.Password = _cryptoService.GetHashString(_cryptoService.HashPassword(user.Password, _cryptoService.GetSalt()));
+            var salt = _cryptoService.GetSalt();
+            user.Salt = Regex.Replace(BitConverter.ToString(salt).ToLower(), "-", "");
+            user.Password = Regex.Replace(BitConverter.ToString(_cryptoService.HashPassword(user.Password, salt)).ToLower(), "-", "");
             return _userRepository.CreateUser(user);
         }
 

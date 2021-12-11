@@ -20,9 +20,9 @@ namespace Persistence
             return ApplicationContext.UsersData.ToList();
         }
 
-        public UserModel GetUserById(Guid userId)
+        public UserModel GetUserById(string username)
         {
-            return ApplicationContext.UsersData.SingleOrDefault(user => user.UserId == userId)!;
+            return ApplicationContext.UsersData.SingleOrDefault(user => user.UserName == username)!;
         }
 
         public UserModel CreateUser(UserModel user)
@@ -41,16 +41,15 @@ namespace Persistence
             }
         }
 
-        public UserModel UpdateUser(Guid id, UserModel user)
+        public UserModel UpdateUser(UserModel user)
         {
-            var userToUpdate = ApplicationContext.UsersData.SingleOrDefault(model => model.UserId == id);
+            var userToUpdate = ApplicationContext.UsersData.SingleOrDefault(model => model.UserName == user.UserName);
 
             if (userToUpdate == null)
             {
                 throw new Exception();
             }
 
-            userToUpdate.UserId = user.UserId;
             userToUpdate.UserName = user.UserName;
             userToUpdate.Email = user.Email;
             userToUpdate.Password = user.Password;
@@ -69,14 +68,13 @@ namespace Persistence
 
         public UserModel UpdateUserPassword(UpdatePasswordModel user)
         {
-            var userToUpdate = ApplicationContext.UsersData.SingleOrDefault(model => model.UserId == user.UserId);
+            var userToUpdate = ApplicationContext.UsersData.SingleOrDefault(model => model.UserName == user.UserName);
 
             if (userToUpdate == null)
             {
                 throw new Exception();
             }
 
-            userToUpdate.UserId = user.UserId;
             userToUpdate.Password = user.NewPassword;
 
             try
@@ -91,9 +89,9 @@ namespace Persistence
             }
         }
 
-        public UserModel DeleteUser(Guid userId)
+        public UserModel DeleteUser(string username)
         {
-            var userToDelete = ApplicationContext.UsersData.SingleOrDefault(user => user.UserId == userId);
+            var userToDelete = ApplicationContext.UsersData.SingleOrDefault(user => user.UserName == username);
 
             if (userToDelete != null)
             {

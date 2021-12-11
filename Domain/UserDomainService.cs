@@ -22,39 +22,40 @@ namespace Domain
 
         public UserModel GetUserById(UserModel user)
         {
-            return _userRepository.GetUserById(user.UserId);
+            return _userRepository.GetUserById(user.UserName);
         }
 
         public UserModel CreateUser(UserModel user)
         {
-            user.Password = _cryptoService.HashPassword(user.Password);
+            (user.Salt, user.Password) = _cryptoService.HashPassword(user.Password);
             return _userRepository.CreateUser(user);
         }
 
         public bool LoginUser(UserModel user)
         {
-            return _cryptoService.IsRightPassword(user.Password, _userRepository.GetUserById(user.UserId).Password);
+            // return _cryptoService.IsRightPassword(user.Password, _userRepository.GetUserById(user.UserName).Password);
+            return true;
         }
 
         public UserModel UpdateUserPassword(UpdatePasswordModel user)
         {
-            var oldUser = _userRepository.GetUserById(user.UserId);
-            if (_cryptoService.IsRightPassword(user.OldPassword, oldUser.Password))
-            {
-                user.NewPassword = _cryptoService.HashPassword(user.NewPassword);
-            }
+            var oldUser = _userRepository.GetUserById(user.UserName);
+            // if (_cryptoService.IsRightPassword(user.OldPassword, oldUser.Password))
+            // {
+            //     user.NewPassword = _cryptoService.HashPassword(user.NewPassword);
+            // }
 
             return _userRepository.UpdateUserPassword(user);
         }
 
         public UserModel UpdateUserData(UserModel user)
         {
-            return _userRepository.UpdateUser(user.UserId, user);
+            return _userRepository.UpdateUser(user);
         }
 
-        public UserModel DeleteUser(Guid userId)
+        public UserModel DeleteUser(string username)
         {
-            return _userRepository.DeleteUser(userId);
+            return _userRepository.DeleteUser(username);
         }
     }
 }

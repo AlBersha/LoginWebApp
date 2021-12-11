@@ -12,7 +12,10 @@ namespace Persistence.Mapping
         public void Configure(EntityTypeBuilder<UserModel> builder)
         {
             builder.ToTable(TableName);
-            builder.HasKey(user => user.UserId);
+            builder.HasKey(user => user.UserName);
+            builder.Property(e => e.Email);
+            builder.Property(e => e.Password);
+            builder.Property(e => e.Salt);
         }
     }
 }

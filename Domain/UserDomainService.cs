@@ -8,11 +8,12 @@ using Domain.Models;
 
 namespace Domain
 {
+    
     public class UserDomainService: IUserDomainService
     {
         private IUserRepository _userRepository;
         private readonly CryptoService _cryptoService = new();
-
+        
         public UserDomainService(IUserRepository repository)
         {
             _userRepository = repository;

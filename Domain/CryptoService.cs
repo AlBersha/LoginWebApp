@@ -2,16 +2,62 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
-using Domain.Models;
+using Amazon.KeyManagementService;
+using Amazon.KeyManagementService.Model;
 using Konscious.Security.Cryptography;
 using Sodium;
-using static System.String;
 
 namespace Domain.Interfaces
 {
     public class CryptoService
     {
+        private readonly byte[] Key;
+        private const string KeyId = "af016287-b1ec-46f5-85f7-43228ad72caa";
+        private const string KeyARN = "arn:aws:kms:us-east-2:662983123043:key/af016287-b1ec-46f5-85f7-43228ad72caa";
+        private const string AccessKeyId = "AKIAZUXG7UBRXWWJHNNZ";
+        private const string AWSSecretKey = "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";
+        private const string ServiceUrl = "https://kms.us-east-2.amazonaws.com";
+        
+        private AmazonKeyManagementServiceClient kmsClient;
+        public CryptoService()
+        {
+            kmsClient = GetClient();
+            var dataKeyRequest = new GenerateDataKeyRequest()
+            {
+                KeyId = KeyARN,
+                KeySpec = DataKeySpec.AES_256
+            };
+        
+            var dataKeyResponse = kmsClient.GenerateDataKeyAsync(dataKeyRequest).Result;
+        
+            
+            Key = dataKeyResponse.Plaintext.ToArray();
+            // var encryptedKey = dataKeyResponse.CiphertextBlob;
+        }
+        
+        private AmazonKeyManagementServiceClient GetClient()
+        {
+            if (kmsClient == null)
+            {
+                try
+                {
+                    var clientConfig = new AmazonKeyManagementServiceConfig
+                    {
+                        // Set the endpoint URL
+                        ServiceURL = ServiceUrl
+                    };
+                    kmsClient = new AmazonKeyManagementServiceClient(AccessKeyId, AWSSecretKey, clientConfig);
+                }
+                catch (Exception ex)
+                {
+                    Console.Out.WriteLine(ex.Message);
+                    throw;
+                }
+                
+            }
+            return kmsClient;
+        }
+        
         private byte[] GetSHA(string password)
         {
             using var shaHash = SHA256.Create();
@@ -75,7 +121,7 @@ namespace Domain.Interfaces
             //     .Select(x => Convert.ToByte(data.Substring(x, 2), 16))
             //     .ToArray();
             var bytes = Encoding.Default.GetBytes(data);
-            return (nonce, SecretAeadXChaCha20Poly1305.Encrypt(bytes, nonce, new byte[32]));
+            return (nonce, SecretAeadXChaCha20Poly1305.Encrypt(bytes, nonce, Key));
         }
         
         public byte[] DecryptData(string data, byte[]nonce)
@@ -84,7 +130,7 @@ namespace Domain.Interfaces
                                         .Where(x => x % 2 == 0)
                                         .Select(x => Convert.ToByte(data.Substring(x, 2), 16))
                                         .ToArray();
-            var tmp = SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, new byte[32]);
+            var tmp = SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, Key);
             return tmp;
         }
     }

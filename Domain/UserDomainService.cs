@@ -99,7 +99,8 @@ namespace Domain
 
         private string BytesToString(byte[] bytes)
         {
-            return Regex.Replace(BitConverter.ToString(bytes).ToLower(), "-", "");
+            return Encoding.Default.GetString(bytes);
+            // return Regex.Replace(BitConverter.ToString(bytes).ToLower(), "-", "");
         }
     }
 }

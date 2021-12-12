@@ -70,17 +70,22 @@ namespace Domain.Interfaces
         public (byte[], byte[]) EncryptData(string data)
         {
             var nonce = GetNonce();
-            return (nonce, SecretAeadXChaCha20Poly1305.Encrypt(Encoding.Default.GetBytes(data), nonce, new byte[32]));
+            // var bytes = Enumerable.Range(0, data.Length)
+            //     .Where(x => x % 2 == 0)
+            //     .Select(x => Convert.ToByte(data.Substring(x, 2), 16))
+            //     .ToArray();
+            var bytes = Encoding.Default.GetBytes(data);
+            return (nonce, SecretAeadXChaCha20Poly1305.Encrypt(bytes, nonce, new byte[32]));
         }
         
         public byte[] DecryptData(string data, byte[]nonce)
         {
-            var bytes = Enumerable
-                .Range(0, data.Length)
-                .Where(x => x % 2 == 0)
-                .Select(x => Convert.ToByte(data.Substring(x, 2), 16))
-                .ToArray();
-            return SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, new byte[32]);
+            var bytes = Enumerable.Range(0, data.Length)
+                                        .Where(x => x % 2 == 0)
+                                        .Select(x => Convert.ToByte(data.Substring(x, 2), 16))
+                                        .ToArray();
+            var tmp = SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, new byte[32]);
+            return tmp;
         }
     }
 }

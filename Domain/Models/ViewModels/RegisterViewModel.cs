@@ -16,5 +16,8 @@ namespace Domain.Models.ViewModels
         [Required]
         [Compare("Password", ErrorMessage = "Confirm password doesn't match!")]
         public string ConfirmPassword { get; set; }
+
+        public string Phone { get; set; }
+        public string CardNumber { get; set; }
     }
 }

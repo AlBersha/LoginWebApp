@@ -11,6 +11,9 @@ namespace Domain.Models.ViewModels
         [Required]
         public string Password { get; set; }
 
+        public string Phone { get; set; }
+        public string Card { get; set; }
+
         public LoginViewModel()
         {
             UserName = string.Empty;

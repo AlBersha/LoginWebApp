@@ -22,12 +22,22 @@ namespace Persistence
 
         public UserModel GetUserById(string username)
         {
-            return ApplicationContext.UsersData.SingleOrDefault(user => user.UserName == username)!;
+            var user = ApplicationContext.UsersData.SingleOrDefault(user => user.UserName == username)!;
+            
+            var card = ApplicationContext.CardsData.SingleOrDefault(model => model.UserName == username);
+            if (card != null) user.Card = new DataStorageModel(card.CardNumber, card.Nonce);
+
+            var phone = ApplicationContext.PhonesData.SingleOrDefault(model => model.UserName == username);
+            if (phone != null) user.Phone = new DataStorageModel(phone.Phone, phone.Nonce);
+
+            return user;
         }
 
         public UserModel CreateUser(UserModel user)
         {
-            ApplicationContext.Add(user);
+            ApplicationContext.UsersData.Add(user);
+            ApplicationContext.CardsData.Add(new CardModel(user.UserName, user.Card));
+            ApplicationContext.PhonesData.Add(new PhoneModel(user.UserName, user.Phone));
 
             try
             {

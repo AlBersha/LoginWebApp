@@ -19,9 +19,10 @@ namespace LoginApp.Controllers
             return View("LoginPage");
         }
 
-        public IActionResult LoginProcessing(LoginViewModel model)
+        public IActionResult LoginProcessing(LoginViewModel user)
         {
-            return _domainService.LoginUser(new UserModel(model)) ? View("LoginSuccessfully", model) : View("LoginPage");
+            var model = new UserModel(user);
+            return _domainService.LoginUser(ref model) ? View("LoginSuccessfully", model) : View("LoginPage");
         }
 
         public IActionResult Register()

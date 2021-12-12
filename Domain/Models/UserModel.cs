@@ -12,13 +12,17 @@ namespace Domain.Models
         [Required]
         public string Password;
         public string Salt;
+        public DataStorageModel Card { get; set; }
+        public DataStorageModel Phone { get; set; }
 
         public UserModel()
         {
-
             UserName = string.Empty;
             Email = string.Empty;
             Password = string.Empty;
+
+            Card = new DataStorageModel();
+            Phone = new DataStorageModel();
         }
         
         
@@ -27,6 +31,14 @@ namespace Domain.Models
             UserName = userData.UserName;
             Email = userData.Email;
             Password = userData.Password;
+            Card = new DataStorageModel
+            {
+                Data = userData.CardNumber
+            };
+            Phone = new DataStorageModel
+            {
+                Data = userData.Phone
+            };
         }
 
         public UserModel(LoginViewModel userData)

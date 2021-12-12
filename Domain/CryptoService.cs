@@ -3,7 +3,10 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Domain.Models;
 using Konscious.Security.Cryptography;
+using Sodium;
+using static System.String;
 
 namespace Domain.Interfaces
 {
@@ -48,6 +51,36 @@ namespace Domain.Interfaces
             var newHash = HashPassword(password, saltBytes);
 
             return hashBytes.SequenceEqual(newHash);
+        }
+        
+        private byte[] GetKey()
+        {
+            var key = new byte[32];
+            RandomNumberGenerator.Create().GetBytes(key);
+            return key;
+        }
+
+        private byte[] GetNonce()
+        {
+            var nonce = new byte[24];
+            RandomNumberGenerator.Create().GetBytes(nonce);
+            return nonce;
+        }
+
+        public (byte[], byte[]) EncryptData(string data)
+        {
+            var nonce = GetNonce();
+            return (nonce, SecretAeadXChaCha20Poly1305.Encrypt(Encoding.Default.GetBytes(data), nonce, new byte[32]));
+        }
+        
+        public byte[] DecryptData(string data, byte[]nonce)
+        {
+            var bytes = Enumerable
+                .Range(0, data.Length)
+                .Where(x => x % 2 == 0)
+                .Select(x => Convert.ToByte(data.Substring(x, 2), 16))
+                .ToArray();
+            return SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, new byte[32]);
         }
     }
 }

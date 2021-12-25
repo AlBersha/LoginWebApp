@@ -9,6 +9,14 @@
       <ProjectReference Include="..\Domain\Domain.csproj" />
       <ProjectReference Include="..\Persistence\Persistence.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\images\she-solved-it-woah-unbelievable.jpg" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="chocolatey" Version="0.11.3" />
+    </ItemGroup>
     
     <PropertyGroup>
         <StartupObject>LoginApp.Program</StartupObject>

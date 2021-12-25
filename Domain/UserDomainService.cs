@@ -8,15 +8,15 @@ using Domain.Models;
 
 namespace Domain
 {
-    
     public class UserDomainService: IUserDomainService
     {
         private IUserRepository _userRepository;
-        private readonly CryptoService _cryptoService = new();
+        private readonly ICryptoService _cryptoService;
         
         public UserDomainService(IUserRepository repository)
         {
             _userRepository = repository;
+            _cryptoService = new CryptoService();
         }
 
         public IReadOnlyCollection<UserModel> GetAllUsers()
@@ -58,7 +58,7 @@ namespace Domain
                     .ToArray();
                 user.Phone = new DataStorageModel
                 {
-                    Data = BytesToString(_cryptoService.DecryptData(potentialUser.Phone.Data, data))
+                    Data = Encoding.Default.GetString(_cryptoService.DecryptData(potentialUser.Phone.Data, data))
                 };
 
                 var card = Enumerable
@@ -68,7 +68,7 @@ namespace Domain
                     .ToArray();
                 user.Card = new DataStorageModel
                 {
-                    Data = BytesToString(_cryptoService.DecryptData(potentialUser.Card.Data, card))
+                    Data = Encoding.Default.GetString(_cryptoService.DecryptData(potentialUser.Card.Data, card))
                 };
                     
                 return true;
@@ -100,8 +100,7 @@ namespace Domain
 
         private string BytesToString(byte[] bytes)
         {
-            return Encoding.Default.GetString(bytes);
-            // return Regex.Replace(BitConverter.ToString(bytes).ToLower(), "-", "");
+            return Regex.Replace(BitConverter.ToString(bytes).ToLower(), "-", "");
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using Amazon.KeyManagementService;
 using Amazon.KeyManagementService.Model;
 using Konscious.Security.Cryptography;
@@ -9,7 +10,7 @@ using Sodium;
 
 namespace Domain.Interfaces
 {
-    public class CryptoService
+    public class CryptoService: ICryptoService
     {
         private readonly byte[] Key;
         private const string KeyId = "af016287-b1ec-46f5-85f7-43228ad72caa";
@@ -24,10 +25,11 @@ namespace Domain.Interfaces
             kmsClient = GetClient();
             var dataKeyRequest = new GenerateDataKeyRequest()
             {
-                KeyId = KeyARN,
-                KeySpec = DataKeySpec.AES_256
+                KeyId = KeyId,
+                KeySpec = DataKeySpec.AES_128
             };
-        
+
+            // var resp = kmsClient.GetPublicKeyAsync(new GetPublicKeyRequest {KeyId = KeyId});
             var dataKeyResponse = kmsClient.GenerateDataKeyAsync(dataKeyRequest).Result;
         
             
@@ -99,13 +101,6 @@ namespace Domain.Interfaces
             return hashBytes.SequenceEqual(newHash);
         }
         
-        private byte[] GetKey()
-        {
-            var key = new byte[32];
-            RandomNumberGenerator.Create().GetBytes(key);
-            return key;
-        }
-
         private byte[] GetNonce()
         {
             var nonce = new byte[24];
@@ -116,12 +111,8 @@ namespace Domain.Interfaces
         public (byte[], byte[]) EncryptData(string data)
         {
             var nonce = GetNonce();
-            // var bytes = Enumerable.Range(0, data.Length)
-            //     .Where(x => x % 2 == 0)
-            //     .Select(x => Convert.ToByte(data.Substring(x, 2), 16))
-            //     .ToArray();
             var bytes = Encoding.Default.GetBytes(data);
-            return (nonce, SecretAeadXChaCha20Poly1305.Encrypt(bytes, nonce, Key));
+            return (nonce, SecretAeadXChaCha20Poly1305.Encrypt(bytes, nonce, new byte[32]));
         }
         
         public byte[] DecryptData(string data, byte[]nonce)
@@ -130,8 +121,7 @@ namespace Domain.Interfaces
                                         .Where(x => x % 2 == 0)
                                         .Select(x => Convert.ToByte(data.Substring(x, 2), 16))
                                         .ToArray();
-            var tmp = SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, Key);
-            return tmp;
+            return SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, new byte[32]);
         }
     }
 }
